@@ -36,6 +36,25 @@
                     Today's Date:
                     <span id="date"></span>
                 </div>
+                <div>
+                    Current Weather in Rockville Centre:
+                    <p>
+                        Current temperature: <span id="temp"></span>
+                    </p>
+                    <p>
+                        Feels like: <span id="feels-like"></span>
+                    </p>
+                    <p>
+                        High temp today: <span id="high-temp"></span>
+                    </p>
+                    <p>
+                        Low temp today: <span id="low-temp"></span>
+                    </p>
+                    <p>
+                        Short sleeves and shorts weather?: <span id="shorts"></span>
+                    </p>
+                    
+                </div>
             </div>
         </div>
         <br/>
@@ -91,6 +110,11 @@
         (function() {
             const date = document.getElementById("date");
             const time = document.getElementById("time");
+            const currentTemp = document.getElementById("temp");
+            const feelsLike = document.getElementById("feels-like");
+            const highTemp = document.getElementById("high-temp");
+            const lowTemp = document.getElementById("low-temp");
+            const shorts = document.getElementById("shorts");
 
             const todaysDate = new Date();
             const months = [
@@ -115,6 +139,29 @@
                 'Friday',
                 'Saturday'
             ]
+            function addF (temp) {
+                return `${temp} °F`
+            }
+            function getWeather () {
+                fetch("http://api.openweathermap.org/data/2.5/weather?id=5134203&appid=11653693555700d6d6cba179f6b1941d&units=imperial")
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.weather[0].main);
+                        const conditions = data.main;
+                        const currentTempData = conditions.temp;
+                        const feelsLikeData = conditions.feels_like;
+                        const highTempData = conditions.temp_max;
+                        const lowTempData = conditions.temp_min;
+                        currentTemp.innerHTML = addF(currentTempData);
+                        feelsLike.innerHTML = addF(feelsLikeData);
+                        highTemp.innerHTML = addF(highTempData);
+                        lowTemp.innerHTML = addF(lowTempData);
+                        shorts.innerHTML = shortsWeather(highTempData)
+                    });
+            }
+            function shortsWeather (temp) {
+                return parseInt(temp) >= 60 ? "YES!" : "NO:("
+            }
             function setCurrentTime () {
                 const current_time = new Date().toLocaleTimeString();
                 time.innerHTML = current_time
@@ -128,6 +175,7 @@
             const todaysYear = todaysDate.getFullYear();
             date.innerHTML = `${todaysDay},  ${todaysMonth} ${todaysDayNumber} ${todaysYear}`;
             setCurrentTime();
+            getWeather();
         })();
     </script>
 </html>
