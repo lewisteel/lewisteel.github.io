@@ -143,7 +143,7 @@
                 return `${temp} °F`
             }
             function getWeather () {
-                fetch("http://api.openweathermap.org/data/2.5/weather?id=5134203&appid=11653693555700d6d6cba179f6b1941d&units=imperial")
+                fetch("https://api.openweathermap.org/data/2.5/weather?id=5134203&appid=11653693555700d6d6cba179f6b1941d&units=imperial")
                     .then(response => response.json())
                     .then(data => {
                         console.log(data.weather[0].main);
