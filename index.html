@@ -17,6 +17,13 @@
                 margin: 20px 0;
                 padding: 20px;
             }
+            .main-header {
+                vertical-align: top;
+            }
+            .weather {
+                position: absolute;
+                right: 10;
+            }
             .video {
                 margin: 25px;
             }
@@ -24,7 +31,7 @@
     </head>
     <body>
         <div class="header">
-            <div class="section">
+            <div class="main-header section">
                 <h1>
                     LEGENDARY
                 </h1>
@@ -36,25 +43,29 @@
                     Today's Date:
                     <span id="date"></span>
                 </div>
-                <div>
+            </div>
+            <div class="weather section">
+                <h3>
                     Current Weather in Rockville Centre:
-                    <p>
-                        Current temperature: <span id="temp"></span>
-                    </p>
-                    <p>
-                        Feels like: <span id="feels-like"></span>
-                    </p>
-                    <p>
-                        High temp today: <span id="high-temp"></span>
-                    </p>
-                    <p>
-                        Low temp today: <span id="low-temp"></span>
-                    </p>
-                    <p>
-                        Short sleeves and shorts weather?: <span id="shorts"></span>
-                    </p>
-                    
-                </div>
+                </h3>
+                <p>
+                    Current temperature: <span id="temp"></span>
+                </p>
+                <p>
+                    Feels like: <span id="feels-like"></span>
+                </p>
+                <p>
+                    High temp today: <span id="high-temp"></span>
+                </p>
+                <p>
+                    Low temp today: <span id="low-temp"></span>
+                </p>
+                <p>
+                    Short sleeves and shorts weather?: <span id="shorts"></span>
+                </p>
+                <p>
+                    Water day?: <span id="water-day"></span>
+                </p>
             </div>
         </div>
         <br/>
@@ -115,6 +126,7 @@
             const highTemp = document.getElementById("high-temp");
             const lowTemp = document.getElementById("low-temp");
             const shorts = document.getElementById("shorts");
+            const waterDay = document.getElementById("water-day");
 
             const todaysDate = new Date();
             const months = [
@@ -140,7 +152,7 @@
                 'Saturday'
             ]
             function addF (temp) {
-                return `${temp} °F`
+                return `${Math.round(parseInt(temp))} °F`
             }
             function getWeather () {
                 fetch("https://api.openweathermap.org/data/2.5/weather?id=5134203&appid=11653693555700d6d6cba179f6b1941d&units=imperial")
@@ -156,11 +168,12 @@
                         feelsLike.innerHTML = addF(feelsLikeData);
                         highTemp.innerHTML = addF(highTempData);
                         lowTemp.innerHTML = addF(lowTempData);
-                        shorts.innerHTML = shortsWeather(highTempData)
+                        shorts.innerHTML = checkWeather(feelsLikeData, 60)
+                        waterDay.innerHTML = checkWeather(feelsLikeData, 79)
                     });
             }
-            function shortsWeather (temp) {
-                return parseInt(temp) >= 60 ? "YES!" : "NO:("
+            function checkWeather (temp, checkTemp) {
+                return parseInt(temp) >= checkTemp ? "YES!" : "NO:("
             }
             function setCurrentTime () {
                 const current_time = new Date().toLocaleTimeString();
